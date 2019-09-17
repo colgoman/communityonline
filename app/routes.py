@@ -31,18 +31,6 @@ def index():
         flash('Your post is now live!')
         # redirect used to mitigate possible annoyance with how the refresh command is implemented in browser
         return redirect(url_for('index'))
-    # test posts
-    # posts =[
-    #     {
-    #         'author':{'username':'John'},
-    #         'body': 'beautiful day in Portland!'
-    #     },
-    #     {
-    #         'author': {'username': 'Susan'},
-    #         'body': 'The Avengers movie was so cool!'
-    #     }
-    # ]
-    #returns all posts of followed users
     posts = current_user.followed_posts().all()
     return render_template('index.html', title='Home Page', form=form, posts=posts)
 
@@ -184,3 +172,12 @@ def unfollow(username):
 
 
 
+@app.route('/explore')
+@login_required
+def explore():
+    '''
+    Explore page to show global post stream from all users
+    '''
+    posts = Post.query.order_by(Post.timestamp.desc()).all()
+    # similar to home page without form argument in template call
+    return render_template('index.html', title='Explore', posts=posts)
