@@ -31,8 +31,29 @@ def index():
         flash('Your post is now live!')
         # redirect used to mitigate possible annoyance with how the refresh command is implemented in browser
         return redirect(url_for('index'))
-    posts = current_user.followed_posts().all()
-    return render_template('index.html', title='Home Page', form=form, posts=posts)
+
+    # determine page number to display, either from page query string argument or a default of 1    
+    page = request.args.get('page', 1, type=int)
+    # paginate() used to retrieve only the desired page of results
+    posts = current_user.followed_posts().paginate(
+        page, app.config['POSTS_PER_PAGE'], False)
+
+    return render_template('index.html', title='Home', form=form, posts=posts.items)
+
+
+@app.route('/explore')
+@login_required
+def explore():
+    '''
+    Explore page to show global post stream from all users
+    '''
+    
+    page = request.args.get('page', 1, type=int)
+    posts = Post.query.order_by(Post.timestamp.desc()).paginate(
+        page, app.config['POSTS_PER_PAGE'], False)
+
+    # similar to home page without form argument in template call
+    return render_template('index.html', title='Explore', posts=posts.items)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -172,12 +193,4 @@ def unfollow(username):
 
 
 
-@app.route('/explore')
-@login_required
-def explore():
-    '''
-    Explore page to show global post stream from all users
-    '''
-    posts = Post.query.order_by(Post.timestamp.desc()).all()
-    # similar to home page without form argument in template call
-    return render_template('index.html', title='Explore', posts=posts)
+
