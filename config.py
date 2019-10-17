@@ -25,3 +25,11 @@ class Config(object):
     # Pagination config variables
     POSTS_PER_PAGE = 20
 
+    # define supported languages
+    LANGUAGES = ['en', 'es']
+
+    # azure translation service key
+    MS_TRANSLATOR_KEY = os.environ.get('MS_TRANSLATOR_KEY')
+
+    
+
