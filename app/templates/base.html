@@ -52,3 +52,10 @@
         {% block app_content %}{% endblock %}
     </div>
 {% endblock %}
+
+<!-- Script block for javaScript imports -->
+{% block scripts %}
+<!-- super used to preserve the content from the base template -->
+    {{  super() }}
+    {{  moment.include_moment() }}
+{% endblock %}
