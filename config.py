@@ -1,6 +1,8 @@
 import os
-# main directory of application
+from dotenv import load_dotenv
+
 basedir = os.path.abspath(os.path.dirname(__file__))
+load_dotenv(os.path.join(basedir, '.env'))
 
 # Class for configuration items
 class Config(object):
