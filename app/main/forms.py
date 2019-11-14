@@ -6,6 +6,7 @@ from flask_babel import _, lazy_gettext as _l
 from app.models import User
 
 
+
 class EditProfileForm(FlaskForm):
     username = StringField(_l('Username'), validators=[DataRequired()])
     about_me = TextAreaField(_l('About me'),
@@ -26,4 +27,18 @@ class EditProfileForm(FlaskForm):
 class PostForm(FlaskForm):
     post = TextAreaField(_l('Say something'), validators=[DataRequired()])
     submit = SubmitField(_l('Submit'))
+
+
+class SearchForm(FlaskForm):
+    q = StringField(_l('Search'), validators=[DataRequired()])
+
+    def __init__(self, *args, **kwargs):
+        if 'formdata' not in kwargs:
+            kwargs['formdata'] = request.args
+        # CSRF protection added by default so must set csrf_enabled to false 
+        if 'csrf_enabled' not in kwargs:
+            # FLASK_WTF to bypass CSRF validation for this form
+            kwargs['csrf_enabled'] = False
+        super(SearchForm, self).__init__(*args, **kwargs)
+    
 

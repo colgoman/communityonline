@@ -33,5 +33,8 @@ class Config(object):
     # azure translation service key
     MS_TRANSLATOR_KEY = os.environ.get('MS_TRANSLATOR_KEY')
 
+    # configure elasticsearch
+    ELASTICSEARCH_URL = os.environ.get('ELASTICSEARCH_URL')
+
     
 
